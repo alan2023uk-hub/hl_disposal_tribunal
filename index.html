@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>去留裁定 — 物品審查表</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ECE5D4;
+    --paper-dark:#DED4BC;
+    --ink:#1F2A44;
+    --ink-light:#46527A;
+    --ink-faint:#8791A8;
+    --brass:#A9884F;
+    --stamp-red:#A63D2F;
+    --stamp-green:#3F6B4A;
+    --line:#C9BDA0;
+    --card:#F5F0E3;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(169,136,79,0.08), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(31,42,68,0.06), transparent 45%);
+    color:var(--ink);
+    font-family:'Noto Sans TC', sans-serif;
+    min-height:100vh;
+    padding:32px 20px 80px;
+  }
+  .wrap{max-width:980px; margin:0 auto;}
+
+  header.top{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    border-bottom:3px double var(--ink);
+    padding-bottom:14px; margin-bottom:28px; flex-wrap:wrap; gap:10px;
+  }
+  header.top h1{
+    font-family:'Noto Serif TC', serif; font-weight:900;
+    font-size:clamp(26px,4vw,38px); margin:0; letter-spacing:.04em;
+  }
+  header.top .sub{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-light);
+    letter-spacing:.08em; text-transform:uppercase;
+  }
+  header.top .file-no{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-faint);
+    text-align:right;
+  }
+
+  .gh-bar{
+    display:flex; justify-content:flex-end; align-items:center; gap:8px; margin-bottom:18px; flex-wrap:wrap;
+  }
+  .gh-status{
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--ink-faint);
+    margin-right:auto;
+  }
+
+  .layout{display:grid; grid-template-columns:1.3fr 1fr; gap:28px; align-items:start;}
+  @media(max-width:800px){ .layout{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    box-shadow:0 1px 0 var(--line), 0 8px 22px -14px rgba(31,42,68,.35);
+    padding:26px 26px 22px;
+    position:relative;
+  }
+  .card::before{
+    content:'';
+    position:absolute; inset:6px;
+    border:1px solid rgba(31,42,68,0.12);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--brass); margin-bottom:6px; font-weight:700;
+  }
+  h2{
+    font-family:'Noto Serif TC', serif; font-size:21px; margin:0 0 16px;
+    font-weight:700; color:var(--ink);
+  }
+  p.help{color:var(--ink-light); font-size:14px; line-height:1.7; margin:0 0 18px;}
+
+  input[type=text], textarea{
+    width:100%; font-family:'Noto Sans TC', sans-serif; font-size:15px;
+    padding:10px 12px; border:1px solid var(--line); background:#fff;
+    color:var(--ink); border-radius:2px;
+  }
+  textarea{resize:vertical; min-height:60px;}
+  label.field-label{
+    display:block; font-size:12.5px; color:var(--ink-light); margin:0 0 6px;
+    font-weight:500; letter-spacing:.02em;
+  }
+  .field{margin-bottom:18px;}
+
+  .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;}
+  button{
+    font-family:'Noto Sans TC', sans-serif; font-size:14px; font-weight:500;
+    padding:10px 18px; border:1px solid var(--ink); background:transparent;
+    color:var(--ink); cursor:pointer; border-radius:2px; transition:all .15s ease;
+  }
+  button:hover{background:var(--ink); color:var(--paper);}
+  button.primary{background:var(--ink); color:var(--card);}
+  button.primary:hover{background:var(--ink-light); border-color:var(--ink-light);}
+  button.gh-save{background:#2da44e; border-color:#2da44e; color:#fff;}
+  button.gh-save:hover{background:#2c974b; border-color:#2c974b; color:#fff;}
+  button.ghost{border-color:var(--line); color:var(--ink-light);}
+  button.ghost:hover{background:var(--ink-light); color:var(--card); border-color:var(--ink-light);}
+  button:disabled{opacity:.35; cursor:not-allowed;}
+  button:disabled:hover{background:transparent; color:var(--ink);}
+
+  .tendency-choice{display:flex; gap:10px; flex-wrap:wrap;}
+  .tendency-choice button{flex:1; min-width:110px;}
+  .tendency-choice button.sel{background:var(--brass); border-color:var(--brass); color:#fff;}
+
+  .qlist{list-style:none; margin:0; padding:0;}
+  .qlist li{
+    padding:12px 0; border-bottom:1px solid var(--line);
+  }
+  .qlist li:last-child{border-bottom:none;}
+  .qrow{display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center;}
+  .qtext{font-size:14.5px; line-height:1.6;}
+  .qtext .qnum{
+    font-family:'JetBrains Mono', monospace; color:var(--brass); font-weight:700;
+    margin-right:6px;
+  }
+  .seg{display:flex; border:1px solid var(--ink); border-radius:2px; overflow:hidden; flex-shrink:0;}
+  .seg button{
+    border:none; border-right:1px solid var(--ink); padding:7px 12px; font-size:12.5px;
+    background:transparent; margin:0; border-radius:0;
+  }
+  .seg button:last-child{border-right:none;}
+  .seg button.sel{background:var(--ink); color:var(--card);}
+  .seg button.sel.yes{background:var(--stamp-red); border-color:var(--stamp-red); color:#fff;}
+  .seg button.sel.no{background:var(--stamp-green); border-color:var(--stamp-green); color:#fff;}
+  .seg button.sel.na{background:var(--ink-faint); border-color:var(--ink-faint); color:#fff;}
+
+  .stepnav{display:flex; justify-content:space-between; margin-top:22px;}
+
+  .progress{
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--ink-faint);
+    letter-spacing:.1em; margin-bottom:16px; text-transform:uppercase;
+  }
+
+  /* criteria edit UI */
+  .crit-toolbar{display:flex; justify-content:flex-end; margin-bottom:8px;}
+  .crit-edit-toggle{
+    font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.05em;
+    color:var(--ink-light); background:none; border:none; padding:2px 4px;
+    text-decoration:underline dotted; cursor:pointer;
+  }
+  .crit-edit-toggle:hover{background:none; color:var(--brass);}
+  .crit-editrow{display:flex; align-items:center; gap:10px; margin-top:8px; flex-wrap:wrap;}
+  .weight-stepper{display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-light);}
+  .weight-stepper button{padding:2px 8px; font-size:12px; line-height:1;}
+  .weight-stepper .wval{min-width:14px; text-align:center; font-weight:700; color:var(--ink);}
+  .dir-toggle{display:flex; border:1px solid var(--line); border-radius:2px; overflow:hidden;}
+  .dir-toggle button{border:none; padding:4px 10px; font-size:11.5px; margin:0; border-radius:0;}
+  .dir-toggle button.sel.dispose{background:var(--stamp-red); color:#fff;}
+  .dir-toggle button.sel.keep{background:var(--stamp-green); color:#fff;}
+  .crit-del{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-faint);
+    background:none; border:none; padding:2px 6px; cursor:pointer;
+  }
+  .crit-del:hover{background:none; color:var(--stamp-red);}
+  .crit-text-edit{font-size:13.5px; padding:6px 8px; margin-top:6px;}
+  .crit-add{
+    margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);
+  }
+  .crit-add .btnrow{margin-top:10px;}
+  .crit-add input[type=text]{margin-bottom:8px;}
+
+  /* verdict stamp */
+  .verdict-box{text-align:center; padding:10px 0 4px;}
+  .stamp{
+    display:inline-block; border:5px double; border-radius:50%;
+    width:150px; height:150px; display:flex; align-items:center; justify-content:center;
+    flex-direction:column; transform:rotate(-9deg); font-family:'Noto Serif TC', serif;
+    font-weight:900; margin:6px auto 14px; animation:stamp-in .35s ease-out;
+  }
+  @keyframes stamp-in{
+    0%{transform:rotate(-9deg) scale(1.6); opacity:0;}
+    100%{transform:rotate(-9deg) scale(1); opacity:1;}
+  }
+  .stamp.dispose{border-color:var(--stamp-red); color:var(--stamp-red);}
+  .stamp.keep{border-color:var(--stamp-green); color:var(--stamp-green);}
+  .stamp.split{border-color:var(--brass); color:var(--brass);}
+  .stamp .big{font-size:28px; letter-spacing:.06em;}
+  .stamp .small{font-size:11px; font-family:'JetBrains Mono', monospace; letter-spacing:.1em; margin-top:4px;}
+
+  .reason-list{text-align:left; font-size:13.5px; line-height:1.8; color:var(--ink-light); margin-top:10px;}
+  .reason-list b{color:var(--ink);}
+  .warn{
+    background:rgba(166,61,47,0.08); border-left:3px solid var(--stamp-red);
+    padding:10px 14px; font-size:13px; color:var(--ink); margin-top:14px; line-height:1.7;
+  }
+
+  /* ledger */
+  .ledger h2{margin-bottom:10px;}
+  .ledger-filter{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;}
+  .ledger-filter button{
+    padding:4px 10px; font-size:12px; border:1px solid var(--line); border-radius:12px;
+  }
+  .ledger-filter button.active{
+    background:var(--ink); color:var(--card); border-color:var(--ink);
+  }
+  .ledger-scroll{
+    max-height:500px;
+    overflow-y:auto;
+    padding-right:6px;
+  }
+  .ledger-scroll::-webkit-scrollbar { width:5px; }
+  .ledger-scroll::-webkit-scrollbar-track { background:transparent; }
+  .ledger-scroll::-webkit-scrollbar-thumb { background:var(--line); border-radius:3px; }
+
+  .ledger-empty{color:var(--ink-faint); font-size:13.5px; padding:20px 0; text-align:center;}
+  .entry{
+    border-bottom:1px solid var(--line); padding:14px 0; cursor:pointer;
+  }
+  .entry:last-child{border-bottom:none;}
+  .entry-top{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .entry-name{font-weight:700; font-size:14.5px;}
+  .entry-verdict{
+    font-family:'JetBrains Mono', monospace; font-size:11px; padding:2px 8px;
+    border-radius:10px; white-space:nowrap; font-weight:700;
+  }
+  .entry-verdict.dispose{background:rgba(166,61,47,0.14); color:var(--stamp-red);}
+  .entry-verdict.keep{background:rgba(63,107,74,0.14); color:var(--stamp-green);}
+  .entry-verdict.split{background:rgba(169,136,79,0.16); color:var(--brass);}
+  .entry-date{font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--ink-faint); margin-top:3px;}
+  .entry-detail{
+    display:none; font-size:12.5px; color:var(--ink-light); line-height:1.7; margin-top:8px;
+    white-space:pre-line;
+  }
+  .entry.open .entry-detail{display:block;}
+  .entry-del{
+    font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--ink-faint);
+    background:none; border:none; padding:2px 4px; margin-top:6px; cursor:pointer;
+  }
+  .entry-del:hover{background:none; color:var(--stamp-red);}
+
+  .framework-note{
+    margin-top:26px; font-size:12px; color:var(--ink-faint); line-height:1.8;
+    border-top:1px dashed var(--line); padding-top:14px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>去留裁定</h1>
+      <div class="sub">Disposal Interrogation Tribunal · 可調式審查架構</div>
+    </div>
+    <div class="file-no" id="fileNo">案卷編號 —</div>
+  </header>
+
+  <div class="gh-bar">
+    <div class="gh-status" id="ghStatus"></div>
+    <button onclick="saveToGitHub()" class="gh-save">Save to GitHub</button>
+  </div>
+
+  <div class="layout">
+    <!-- FORM CARD -->
+    <div class="card" id="formCard"></div>
+
+    <!-- LEDGER -->
+    <div class="card ledger">
+      <div class="eyebrow">歷史紀錄</div>
+      <h2>裁定存檔</h2>
+      <div class="ledger-filter">
+        <button class="active" onclick="setFilter('all', this)">全部</button>
+        <button onclick="setFilter('keep', this)">保留</button>
+        <button onclick="setFilter('dispose', this)">處置</button>
+        <button onclick="setFilter('split', this)">拆分</button>
+      </div>
+      <div class="ledger-scroll" id="ledgerList">
+        <div class="ledger-empty">尚未有存檔紀錄</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="framework-note">
+    STEP 1 誠實傾向偵測：若直覺已明確，可直接尊重直覺記錄，不必跑完整審查。<br>
+    STEP 3 第一層：任一條件成立即判處置的充分條件（可自行增刪修改）。<br>
+    STEP 4 第二層：加權綜合評估 — 各題可設定方向（傾向處置／傾向保留）與權重（1–5），符合方向者計分，不符合者計入對向；「不適用」不計分。分數高的一方勝出，平手預設保留。<br>
+    所有準則皆可在對應步驟按「編輯準則」增刪修改，並會隨存檔一併同步至 GitHub。
+  </div>
+</div>
+
+<script>
+const GH_CONFIG_KEY = 'tribunal_gh_config';
+const CRITERIA_KEY = 'tribunal_criteria';
+const LEDGER_KEY = 'tribunal_ledger';
+
+let state = {};
+let ledger = [];
+let ghSHA = null;
+let currentFilter = 'all';
+let editL1 = false;
+let editL2 = false;
+
+/* ---------- Default seed criteria ---------- */
+const DEFAULT_L1 = [
+  { id:'l1-1', text:'已過期／已失去安全使用期限' },
+  { id:'l1-2', text:'已損壞至無法修復，且維修成本高於重置成本' },
+  { id:'l1-3', text:'已有功能相同或更佳、且正在實際使用中的替代品' },
+  { id:'l1-4', text:'具法定時效文件，保存期限已過且無延續效力' },
+];
+const DEFAULT_L2 = [
+  { id:'l2-1', text:'近期／可預見的未來，說不出具體會使用它的情境或計畫', direction:'dispose', weight:1 },
+  { id:'l2-2', text:'移除後只是少了「熟悉感」，而非失去具體回憶或情感連結', direction:'dispose', weight:1 },
+  { id:'l2-3', text:'容易且低成本重新取得', direction:'dispose', weight:1 },
+  { id:'l2-4', text:'沒有「備用」的角色（非首選但關鍵時刻能用上）', direction:'dispose', weight:1 },
+  { id:'l2-5', text:'體積／重量偏大', direction:'dispose', weight:1 },
+];
+
+let criteriaL1 = [];
+let criteriaL2 = [];
+
+function resetState(){
+  state = {
+    step:0,
+    name:'',
+    tendency:null,     // 'keep' | 'dispose' | 'unsure'
+    trustInstinct:null,
+    splittable:null,
+    splitNote:'',
+    answersL1:{},      // id -> true/false
+    answersL2:{},      // id -> true/false/'na'
+  };
+}
+resetState();
+
+function render(){
+  const c = document.getElementById('formCard');
+  if(state.step===0) return renderStep0(c);
+  if(state.step===1) return renderStep1(c);
+  if(state.step===2) return renderStep2(c);
+  if(state.step===3) return renderStep3(c);
+  if(state.step===4) return renderStep4(c);
+  if(state.step===5) return renderVerdict(c);
+}
+
+function renderStep0(c){
+  c.innerHTML = `
+    <div class="eyebrow">STEP 0 · 登記</div>
+    <h2>物品登記</h2>
+    <p class="help">請輸入要審查的物品名稱與簡述。</p>
+    <div class="field">
+      <label class="field-label">物品名稱</label>
+      <input type="text" id="itemName" placeholder="例：紅色迷你背包" value="${escapeHtml(state.name)}">
+    </div>
+    <div class="btnrow">
+      <button class="primary" onclick="submitName()">開始審查 →</button>
+    </div>
+  `;
+  document.getElementById('itemName').focus();
+}
+function submitName(){
+  const v = document.getElementById('itemName').value.trim();
+  if(!v) return;
+  state.name = v;
+  state.step = 1;
+  render();
+}
+
+function renderStep1(c){
+  c.innerHTML = `
+    <div class="progress">STEP 1 / 5 · 誠實傾向偵測</div>
+    <h2>「${escapeHtml(state.name)}」— 你內心本來的傾向？</h2>
+    <p class="help">在套用任何標準之前，先誠實回答。若傾向已很明確，標準測試容易變成事後找理由。</p>
+    <div class="tendency-choice">
+      <button onclick="setTendency('keep')" class="${state.tendency==='keep'?'sel':''}">本來就想留</button>
+      <button onclick="setTendency('dispose')" class="${state.tendency==='dispose'?'sel':''}">本來就想丟</button>
+      <button onclick="setTendency('unsure')" class="${state.tendency==='unsure'?'sel':''}">真的未定</button>
+    </div>
+    <div id="tendencyFollow"></div>
+    <div class="stepnav">
+      <button class="ghost" onclick="goBack()">← 上一步</button>
+      <button class="primary" id="step1next" disabled onclick="afterStep1()">繼續 →</button>
+    </div>
+  `;
+  renderTendencyFollow();
+}
+function setTendency(t){
+  state.tendency = t;
+  state.trustInstinct = null;
+  renderTendencyFollow();
+}
+function renderTendencyFollow(){
+  const el = document.getElementById('tendencyFollow');
+  const nextBtn = document.getElementById('step1next');
+  if(!state.tendency){ el.innerHTML=''; nextBtn.disabled = true; return; }
+  if(state.tendency === 'unsure'){
+    el.innerHTML = '';
+    nextBtn.disabled = false;
+    return;
+  }
+  el.innerHTML = `
+    <div class="field" style="margin-top:14px;">
+      <label class="field-label">既然傾向已經明確，是否仍要跑完整審查（誠實核對理由），還是尊重直覺、直接記錄？</label>
+      <div class="btnrow">
+        <button onclick="setTrust(true)" class="${state.trustInstinct===true?'sel':''}">尊重直覺，直接記錄</button>
+        <button onclick="setTrust(false)" class="${state.trustInstinct===false?'sel':''}">仍要跑完整審查</button>
+      </div>
+    </div>
+  `;
+  nextBtn.disabled = state.trustInstinct===null;
+}
+function setTrust(v){
+  state.trustInstinct = v;
+  renderTendencyFollow();
+}
+function afterStep1(){
+  if(state.tendency!=='unsure' && state.trustInstinct===true){
+    finalizeInstinct();
+    return;
+  }
+  state.step = 2;
+  render();
+}
+
+function renderStep2(c){
+  c.innerHTML = `
+    <div class="progress">STEP 2 / 5 · 可拆分性</div>
+    <h2>此物品是否可拆分處置？</h2>
+    <p class="help">部分可拆解、可留部分內容而處置其餘（如相簿：留手寫頁、掃描存檔，其餘丟棄）。</p>
+    <div class="tendency-choice">
+      <button onclick="setSplit(true)" class="${state.splittable===true?'sel':''}">可以拆分</button>
+      <button onclick="setSplit(false)" class="${state.splittable===false?'sel':''}">不可拆分／整體判斷</button>
+    </div>
+    ${state.splittable ? `
+    <div class="field" style="margin-top:14px;">
+      <label class="field-label">說明：哪部分保留，哪部分處置？</label>
+      <textarea id="splitNote" oninput="state.splitNote=this.value">${escapeHtml(state.splitNote)}</textarea>
+    </div>` : ''}
+    <div class="stepnav">
+      <button class="ghost" onclick="goBack()">← 上一步</button>
+      <button class="primary" ${state.splittable===null?'disabled':''} onclick="afterStep2()">繼續 →</button>
+    </div>
+  `;
+}
+function setSplit(v){ state.splittable = v; render(); }
+function afterStep2(){
+  if(state.splittable === true){
+    state.step = 5;
+    render();
+    return;
+  }
+  state.step = 3;
+  render();
+}
+
+/* ---------- STEP 3: L1 short-circuit (editable) ---------- */
+function renderStep3(c){
+  const allAnswered = criteriaL1.every(cr => state.answersL1[cr.id]!==undefined);
+  const anyYes = criteriaL1.some(cr => state.answersL1[cr.id]===true);
+  const canProceed = allAnswered || anyYes;
+  c.innerHTML = `
+    <div class="progress">STEP 3 / 5 · 第一層：單一充分條件</div>
+    <h2>是否符合以下任一條件？</h2>
+    <p class="help">任一成立即構成充分理由，直接判定處置，無需再看下一層或答完其餘項目。</p>
+    <div class="crit-toolbar">
+      <button class="crit-edit-toggle" onclick="toggleEditL1()">${editL1?'完成編輯':'編輯準則'}</button>
+    </div>
+    <ul class="qlist" id="l1list">
+      ${criteriaL1.map((cr,i)=>renderL1Item(cr,i)).join('')}
+    </ul>
+    ${editL1 ? renderAddL1Form() : ''}
+    <div class="stepnav">
+      <button class="ghost" onclick="goBack()">← 上一步</button>
+      <button class="primary" ${!canProceed?'disabled':''} onclick="afterStep3()">繼續 →</button>
+    </div>
+  `;
+}
+function renderL1Item(cr,i){
+  const v = state.answersL1[cr.id];
+  return `
+    <li>
+      <div class="qrow">
+        <div class="qtext"><span class="qnum">${i+1}</span>${escapeHtml(cr.text)}</div>
+        <div class="seg">
+          <button class="${v===true?'sel yes':''}" onclick="setL1('${cr.id}',true)">是</button>
+          <button class="${v===false?'sel no':''}" onclick="setL1('${cr.id}',false)">否</button>
+        </div>
+      </div>
+      ${editL1 ? `
+      <div class="crit-editrow">
+        <button class="crit-del" onclick="deleteL1('${cr.id}')">✕ 刪除此準則</button>
+      </div>
+      <textarea class="crit-text-edit" oninput="editL1Text('${cr.id}', this.value)">${escapeHtml(cr.text)}</textarea>
+      ` : ''}
+    </li>
+  `;
+}
+function renderAddL1Form(){
+  return `
+    <div class="crit-add">
+      <label class="field-label">新增第一層準則</label>
+      <input type="text" id="newL1Text" placeholder="例：已被官方回收／停產且無安全隱憂替代方案">
+      <div class="btnrow">
+        <button onclick="addL1()">+ 新增準則</button>
+      </div>
+    </div>
+  `;
+}
+function toggleEditL1(){ editL1 = !editL1; render(); }
+function setL1(id,v){ state.answersL1[id] = v; render(); }
+function editL1Text(id, text){
+  const cr = criteriaL1.find(x=>x.id===id);
+  if(cr){ cr.text = text; saveCriteria(); }
+}
+function deleteL1(id){
+  criteriaL1 = criteriaL1.filter(x=>x.id!==id);
+  delete state.answersL1[id];
+  saveCriteria();
+  render();
+}
+function addL1(){
+  const el = document.getElementById('newL1Text');
+  const text = el.value.trim();
+  if(!text) return;
+  criteriaL1.push({ id:'l1-'+Date.now(), text });
+  saveCriteria();
+  render();
+}
+function afterStep3(){
+  if(criteriaL1.some(cr => state.answersL1[cr.id]===true)){
+    state.step = 5;
+    render();
+    return;
+  }
+  state.step = 4;
+  render();
+}
+
+/* ---------- STEP 4: L2 weighted (editable) ---------- */
+function renderStep4(c){
+  const allAnswered = criteriaL2.every(cr => state.answersL2[cr.id]!==undefined);
+  c.innerHTML = `
+    <div class="progress">STEP 4 / 5 · 第二層：加權綜合評估</div>
+    <h2>逐項核對</h2>
+    <p class="help">第一層未成立，需綜合評估。每題可設定方向（傾向處置／傾向保留）與權重；「符合」計入該方向分數，「不符合」計入對向分數，「不適用」不計分。</p>
+    <div class="crit-toolbar">
+      <button class="crit-edit-toggle" onclick="toggleEditL2()">${editL2?'完成編輯':'編輯準則／權重'}</button>
+    </div>
+    <ul class="qlist" id="l2list">
+      ${criteriaL2.map((cr,i)=>renderL2Item(cr,i)).join('')}
+    </ul>
+    ${editL2 ? renderAddL2Form() : ''}
+    <div class="stepnav">
+      <button class="ghost" onclick="goBack()">← 上一步</button>
+      <button class="primary" ${!allAnswered?'disabled':''} onclick="()=>{}" id="finalBtn">得出裁定 →</button>
+    </div>
+  `;
+  document.getElementById('finalBtn').onclick = ()=>{ state.step=5; render(); };
+}
+function renderL2Item(cr,i){
+  const v = state.answersL2[cr.id];
+  return `
+    <li>
+      <div class="qrow">
+        <div class="qtext"><span class="qnum">${i+1}</span>${escapeHtml(cr.text)}
+          <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-faint); margin-left:6px;">
+            [${cr.direction==='dispose'?'傾向處置':'傾向保留'} · 權重 ${cr.weight}]
+          </span>
+        </div>
+        <div class="seg">
+          <button class="${v===true?'sel yes':''}" onclick="setL2('${cr.id}',true)">符合</button>
+          <button class="${v===false?'sel no':''}" onclick="setL2('${cr.id}',false)">不符合</button>
+          <button class="${v==='na'?'sel na':''}" onclick="setL2('${cr.id}','na')">不適用</button>
+        </div>
+      </div>
+      ${editL2 ? `
+      <div class="crit-editrow">
+        <div class="dir-toggle">
+          <button class="${cr.direction==='dispose'?'sel dispose':''}" onclick="setL2Dir('${cr.id}','dispose')">傾向處置</button>
+          <button class="${cr.direction==='keep'?'sel keep':''}" onclick="setL2Dir('${cr.id}','keep')">傾向保留</button>
+        </div>
+        <div class="weight-stepper">
+          權重
+          <button onclick="adjustL2Weight('${cr.id}',-1)">−</button>
+          <span class="wval">${cr.weight}</span>
+          <button onclick="adjustL2Weight('${cr.id}',1)">+</button>
+        </div>
+        <button class="crit-del" onclick="deleteL2('${cr.id}')">✕ 刪除此準則</button>
+      </div>
+      <textarea class="crit-text-edit" oninput="editL2Text('${cr.id}', this.value)">${escapeHtml(cr.text)}</textarea>
+      ` : ''}
+    </li>
+  `;
+}
+function renderAddL2Form(){
+  return `
+    <div class="crit-add">
+      <label class="field-label">新增第二層準則</label>
+      <input type="text" id="newL2Text" placeholder="例：過去一年內從未使用過">
+      <div class="btnrow" style="align-items:center;">
+        <div class="dir-toggle" id="newL2Dir">
+          <button class="sel dispose" onclick="setNewL2Dir('dispose', this)">傾向處置</button>
+          <button onclick="setNewL2Dir('keep', this)">傾向保留</button>
+        </div>
+        <div class="weight-stepper">
+          權重
+          <button onclick="adjustNewL2Weight(-1)">−</button>
+          <span class="wval" id="newL2WeightVal">1</span>
+          <button onclick="adjustNewL2Weight(1)">+</button>
+        </div>
+      </div>
+      <div class="btnrow">
+        <button onclick="addL2()">+ 新增準則</button>
+      </div>
+    </div>
+  `;
+}
+let newL2Dir = 'dispose';
+let newL2Weight = 1;
+function setNewL2Dir(d, btnEl){
+  newL2Dir = d;
+  const wrap = document.getElementById('newL2Dir');
+  wrap.querySelectorAll('button').forEach(b=>b.classList.remove('sel','dispose','keep'));
+  btnEl.classList.add('sel', d);
+}
+function adjustNewL2Weight(delta){
+  newL2Weight = Math.min(5, Math.max(1, newL2Weight + delta));
+  document.getElementById('newL2WeightVal').textContent = newL2Weight;
+}
+function toggleEditL2(){ editL2 = !editL2; render(); }
+function setL2(id,v){ state.answersL2[id] = v; render(); }
+function setL2Dir(id,d){
+  const cr = criteriaL2.find(x=>x.id===id);
+  if(cr){ cr.direction = d; saveCriteria(); render(); }
+}
+function adjustL2Weight(id,delta){
+  const cr = criteriaL2.find(x=>x.id===id);
+  if(cr){ cr.weight = Math.min(5, Math.max(1, cr.weight + delta)); saveCriteria(); render(); }
+}
+function editL2Text(id, text){
+  const cr = criteriaL2.find(x=>x.id===id);
+  if(cr){ cr.text = text; saveCriteria(); }
+}
+function deleteL2(id){
+  criteriaL2 = criteriaL2.filter(x=>x.id!==id);
+  delete state.answersL2[id];
+  saveCriteria();
+  render();
+}
+function addL2(){
+  const el = document.getElementById('newL2Text');
+  const text = el.value.trim();
+  if(!text) return;
+  criteriaL2.push({ id:'l2-'+Date.now(), text, direction:newL2Dir, weight:newL2Weight });
+  newL2Dir = 'dispose';
+  newL2Weight = 1;
+  saveCriteria();
+  render();
+}
+
+/* ---------- Verdict ---------- */
+function computeVerdict(){
+  if(state.splittable===true){
+    return {
+      type:'split',
+      title:'拆分處置',
+      sub:'PARTIAL DISPOSAL',
+      reasons:[`拆分說明：${state.splitNote || '（未填寫）'}`, '不可取代部分建議保留或掃描存檔，其餘部分依標準處置。']
+    };
+  }
+  const hitL1 = criteriaL1.filter(cr => state.answersL1[cr.id]===true);
+  if(hitL1.length>0){
+    return {
+      type:'dispose',
+      title:'處置',
+      sub:'DISPOSE · LAYER 1',
+      reasons:['第一層單一充分條件成立：', ...hitL1.map(h=>'· '+h.text)]
+    };
+  }
+  let disposeScore = 0, keepScore = 0;
+  const disposeHits = [], keepHits = [];
+  criteriaL2.forEach(cr=>{
+    const ans = state.answersL2[cr.id];
+    if(ans==='na' || ans===undefined) return;
+    const forDispose = (ans===true && cr.direction==='dispose') || (ans===false && cr.direction==='keep');
+    const forKeep    = (ans===true && cr.direction==='keep')    || (ans===false && cr.direction==='dispose');
+    if(forDispose){ disposeScore += cr.weight; disposeHits.push(cr); }
+    else if(forKeep){ keepScore += cr.weight; keepHits.push(cr); }
+  });
+  let type, title, sub;
+  if(disposeScore > keepScore){ type='dispose'; title='傾向處置'; sub='LEAN DISPOSE · LAYER 2'; }
+  else if(keepScore > disposeScore){ type='keep'; title='傾向保留'; sub='LEAN KEEP · LAYER 2'; }
+  else { type='keep'; title='勢均力敵（預設保留，留待下次覆核）'; sub='TIE · LAYER 2'; }
+
+  const reasons = [
+    `第二層加權分數：傾向處置 ${disposeScore} 分／傾向保留 ${keepScore} 分`,
+  ];
+  return {type,title,sub,reasons};
+}
+
+function renderVerdict(c){
+  const v = computeVerdict();
+  const conflictWarn = (state.tendency && state.tendency!=='unsure' &&
+    ((state.tendency==='keep' && v.type==='dispose') || (state.tendency==='dispose' && v.type==='keep')))
+    ? `<div class="warn">提醒：您原先的直覺傾向是「${state.tendency==='keep'?'想留':'想丟'}」，但客觀評估結果是「${v.title}」。建議誠實檢視：這份猶豫，究竟是理由不足，還是單純情感/習慣？</div>`
+    : '';
+
+  c.innerHTML = `
+    <div class="progress">STEP 5 / 5 · 裁定</div>
+    <h2>「${escapeHtml(state.name)}」裁定結果</h2>
+    <div class="verdict-box">
+      <div class="stamp ${v.type}">
+        <div class="big">${v.title}</div>
+        <div class="small">${v.sub}</div>
+      </div>
+      <div class="reason-list">
+        ${v.reasons.map(r=>`<div>${escapeHtml(r)}</div>`).join('')}
+      </div>
+      ${conflictWarn}
+    </div>
+    <div class="btnrow" style="justify-content:center; margin-top:20px;">
+      <button class="primary" onclick="saveEntry()">存入紀錄</button>
+      <button class="ghost" onclick="startNew()">審查下一件</button>
+    </div>
+  `;
+}
+
+function finalizeInstinct(){
+  const label = state.tendency==='keep' ? '保留（尊重直覺）' : '處置（尊重直覺）';
+  const type = state.tendency==='keep' ? 'keep' : 'dispose';
+  const c = document.getElementById('formCard');
+  c.innerHTML = `
+    <div class="progress">已完成 · 尊重直覺</div>
+    <h2>「${escapeHtml(state.name)}」裁定結果</h2>
+    <div class="verdict-box">
+      <div class="stamp ${type}">
+        <div class="big">${type==='keep'?'保留':'處置'}</div>
+        <div class="small">INSTINCT HONOURED</div>
+      </div>
+      <div class="reason-list"><div>未跑完整審查，尊重既定直覺傾向。</div></div>
+    </div>
+    <div class="btnrow" style="justify-content:center; margin-top:20px;">
+      <button class="primary" onclick="saveEntryDirect('${type}','${escapeHtml(label)}')">存入紀錄</button>
+      <button class="ghost" onclick="startNew()">審查下一件</button>
+    </div>
+  `;
+}
+
+function saveEntryDirect(type,label){
+  addLedgerEntry(state.name, type, label);
+  startNew();
+}
+function saveEntry(){
+  const v = computeVerdict();
+  const detail = v.reasons.join('\n');
+  addLedgerEntry(state.name, v.type, `${v.title}\n${detail}`);
+  startNew();
+}
+
+function startNew(){
+  resetState();
+  editL1 = false;
+  editL2 = false;
+  render();
+}
+function goBack(){
+  state.step = Math.max(0, state.step-1);
+  render();
+}
+
+/* ---------- Criteria persistence ---------- */
+function loadCriteria(){
+  try {
+    const raw = localStorage.getItem(CRITERIA_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      criteriaL1 = Array.isArray(parsed.l1) && parsed.l1.length ? parsed.l1 : DEFAULT_L1.slice();
+      criteriaL2 = Array.isArray(parsed.l2) && parsed.l2.length ? parsed.l2 : DEFAULT_L2.slice();
+      return;
+    }
+  } catch(e){ console.error('Criteria load failed', e); }
+  criteriaL1 = DEFAULT_L1.slice();
+  criteriaL2 = DEFAULT_L2.slice();
+}
+function saveCriteria(){
+  try {
+    localStorage.setItem(CRITERIA_KEY, JSON.stringify({ l1:criteriaL1, l2:criteriaL2 }));
+  } catch(e){ console.error('Criteria save failed', e); }
+}
+
+/* ---------- Persistence & GitHub Sync ---------- */
+function getGHConfig(){
+  const cfg = localStorage.getItem(GH_CONFIG_KEY);
+  return cfg ? JSON.parse(cfg) : null;
+}
+
+async function fetchGitHubUser(token){
+  try {
+    const res = await fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    if(res.ok){
+      const data = await res.json();
+      return data.login;
+    }
+  } catch(e) {
+    console.error("無法取得 GitHub 用戶資訊:", e);
+  }
+  return null;
+}
+
+async function configGitHub(){
+  const cfg = getGHConfig() || {};
+  const token = prompt("請輸入 GitHub Personal Access Token:", cfg.token || "");
+  if(!token) return false;
+
+  const repo = prompt("請輸入 Repository 名稱:", cfg.repo || "");
+  if(!repo) return false;
+
+  const path = prompt("請輸入 JSON 檔案路徑 (預設 data.json):", cfg.path || "data.json");
+
+  const owner = await fetchGitHubUser(token);
+  if(!owner){
+    alert("Token 驗證失敗，請重新檢查您的 Token 權限。");
+    return false;
+  }
+
+  const config = { owner, repo, path: path || "data.json", token };
+  localStorage.setItem(GH_CONFIG_KEY, JSON.stringify(config));
+  updateGhBar();
+  await loadFromGitHub();
+  return true;
+}
+
+function updateGhBar(){
+  const cfg = getGHConfig();
+  document.getElementById('ghStatus').textContent = cfg ? `已連接：${cfg.owner}/${cfg.repo}` : '尚未連接 GitHub';
+}
+
+async function loadLedger(){
+  updateGhBar();
+  const cfg = getGHConfig();
+  if (cfg && cfg.token) {
+    const success = await loadFromGitHub();
+    if (success) return;
+  }
+  loadFromLocalStorage();
+}
+
+async function loadFromGitHub(){
+  const cfg = getGHConfig();
+  if(!cfg) return false;
+
+  const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'Authorization': `token ${cfg.token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+
+    if(res.ok){
+      const data = await res.json();
+      ghSHA = data.sha;
+      const content = decodeURIComponent(escape(atob(data.content)));
+      const parsed = JSON.parse(content);
+      if(Array.isArray(parsed)){
+        // legacy format: plain ledger array, no criteria payload
+        ledger = parsed;
+      } else {
+        ledger = Array.isArray(parsed.ledger) ? parsed.ledger : [];
+        if(parsed.criteria){
+          criteriaL1 = Array.isArray(parsed.criteria.l1) && parsed.criteria.l1.length ? parsed.criteria.l1 : criteriaL1;
+          criteriaL2 = Array.isArray(parsed.criteria.l2) && parsed.criteria.l2.length ? parsed.criteria.l2 : criteriaL2;
+          saveCriteria();
+        }
+      }
+      renderLedger();
+      return true;
+    }
+  } catch(e) {
+    console.error("GitHub 連線失敗:", e);
+  }
+  return false;
+}
+
+function saveToLocalStorage(){
+  try {
+    localStorage.setItem(LEDGER_KEY, JSON.stringify(ledger));
+  } catch(e) {
+    console.error('Local save failed', e);
+  }
+}
+
+function loadFromLocalStorage(){
+  try {
+    const data = localStorage.getItem(LEDGER_KEY);
+    if(data) ledger = JSON.parse(data);
+  } catch(e) {
+    console.error('Local load failed', e);
+  }
+  renderLedger();
+}
+
+function addLedgerEntry(name, verdictType, detail){
+  const entry = {
+    id: 'i' + Date.now(),
+    name, verdictType, detail,
+    date: new Date().toLocaleString('zh-Hant', {hour12:false})
+  };
+  ledger.unshift(entry);
+  saveToLocalStorage();
+  renderLedger();
+}
+
+function deleteEntry(id){
+  const entry = ledger.find(e => e.id === id);
+  const name = entry ? entry.name : '此項目';
+
+  if (confirm(`確定要刪除「${name}」的裁定紀錄嗎？`)) {
+    ledger = ledger.filter(e => e.id !== id);
+    saveToLocalStorage();
+    renderLedger();
+  }
+}
+
+async function saveToGitHub(){
+  let cfg = getGHConfig();
+  if(!cfg || !cfg.token){
+    const ok = await configGitHub();
+    if(!ok) return;
+    cfg = getGHConfig();
+  }
+
+  if(!ghSHA){
+    await loadFromGitHub();
+  }
+
+  const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+  const payload = { ledger, criteria: { l1:criteriaL1, l2:criteriaL2 } };
+  const contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+
+  const bodyData = {
+    message: `Update tribunal ledger [${new Date().toLocaleString()}]`,
+    content: contentEncoded,
+    sha: ghSHA
+  };
+
+  try {
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${cfg.token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify(bodyData)
+    });
+
+    if(res.ok){
+      const resData = await res.json();
+      ghSHA = resData.content.sha;
+      alert("成功同步並儲存至 GitHub！");
+    } else {
+      const err = await res.json();
+      alert(`GitHub 儲存失敗：${err.message}`);
+    }
+  } catch(e) {
+    alert(`儲存出錯：${e.message}`);
+  }
+}
+
+function setFilter(filterType, btnEl){
+  currentFilter = filterType;
+  const btns = document.querySelectorAll('.ledger-filter button');
+  btns.forEach(b => b.classList.remove('active'));
+  if(btnEl) btnEl.classList.add('active');
+  renderLedger();
+}
+
+function renderLedger(){
+  const el = document.getElementById('ledgerList');
+  document.getElementById('fileNo').textContent = '案卷編號 №' + String(ledger.length).padStart(3,'0');
+
+  if(ledger.length===0){
+    el.innerHTML = '<div class="ledger-empty">尚未有存檔紀錄</div>';
+    return;
+  }
+
+  const filtered = currentFilter === 'all'
+    ? ledger
+    : ledger.filter(e => e.verdictType === currentFilter);
+
+  if(filtered.length===0){
+    el.innerHTML = '<div class="ledger-empty">無此類別的紀錄</div>';
+    return;
+  }
+
+  el.innerHTML = filtered.map(e=>`
+    <div class="entry" onclick="toggleEntry(this)">
+      <div class="entry-top">
+        <div class="entry-name">${escapeHtml(e.name)}</div>
+        <div class="entry-verdict ${e.verdictType}">${verdictLabel(e.verdictType)}</div>
+      </div>
+      <div class="entry-date">${e.date}</div>
+      <div class="entry-detail">${escapeHtml(e.detail)}</div>
+      <button class="entry-del" onclick="event.stopPropagation(); deleteEntry('${e.id}')">刪除紀錄</button>
+    </div>
+  `).join('');
+}
+
+function verdictLabel(t){
+  if(t==='dispose') return '處置';
+  if(t==='keep') return '保留';
+  if(t==='split') return '拆分';
+  return t;
+}
+
+function toggleEntry(el){ el.classList.toggle('open'); }
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+loadCriteria();
+render();
+loadLedger();
+</script>
+</body>
+</html>
