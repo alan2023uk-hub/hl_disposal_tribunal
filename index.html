@@ -168,7 +168,14 @@
   }
 
   /* ledger */
-  .ledger h2{margin-bottom:4px;}
+  .ledger h2{margin-bottom:10px;}
+  .ledger-filter{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;}
+  .ledger-filter button{
+    padding:4px 10px; font-size:12px; border:1px solid var(--line); border-radius:12px;
+  }
+  .ledger-filter button.active{
+    background:var(--ink); color:var(--card); border-color:var(--ink);
+  }
   .ledger-empty{color:var(--ink-faint); font-size:13.5px; padding:20px 0; text-align:center;}
   .entry{
     border-bottom:1px solid var(--line); padding:14px 0; cursor:pointer;
@@ -225,6 +232,12 @@
     <div class="card ledger">
       <div class="eyebrow">歷史紀錄</div>
       <h2>裁定存檔</h2>
+      <div class="ledger-filter">
+        <button class="active" onclick="setFilter('all', this)">全部</button>
+        <button onclick="setFilter('keep', this)">保留</button>
+        <button onclick="setFilter('dispose', this)">處置</button>
+        <button onclick="setFilter('split', this)">拆分</button>
+      </div>
       <div id="ledgerList"><div class="ledger-empty">尚未有存檔紀錄</div></div>
     </div>
   </div>
@@ -242,6 +255,7 @@ const GH_CONFIG_KEY = 'tribunal_gh_config';
 let state = {};
 let ledger = [];
 let ghSHA = null;
+let currentFilter = 'all';
 
 function resetState(){
   state = {
@@ -746,14 +760,33 @@ async function saveToGitHub(){
   }
 }
 
+function setFilter(filterType, btnEl){
+  currentFilter = filterType;
+  const btns = document.querySelectorAll('.ledger-filter button');
+  btns.forEach(b => b.classList.remove('active'));
+  if(btnEl) btnEl.classList.add('active');
+  renderLedger();
+}
+
 function renderLedger(){
   const el = document.getElementById('ledgerList');
   document.getElementById('fileNo').textContent = '案卷編號 №' + String(ledger.length).padStart(3,'0');
+  
   if(ledger.length===0){
     el.innerHTML = '<div class="ledger-empty">尚未有存檔紀錄</div>';
     return;
   }
-  el.innerHTML = ledger.map(e=>`
+
+  const filtered = currentFilter === 'all' 
+    ? ledger 
+    : ledger.filter(e => e.verdictType === currentFilter);
+
+  if(filtered.length===0){
+    el.innerHTML = '<div class="ledger-empty">無此類別的紀錄</div>';
+    return;
+  }
+
+  el.innerHTML = filtered.map(e=>`
     <div class="entry" onclick="toggleEntry(this)">
       <div class="entry-top">
         <div class="entry-name">${escapeHtml(e.name)}</div>
