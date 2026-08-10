@@ -144,13 +144,19 @@
     letter-spacing:.1em; margin-bottom:18px; text-transform:uppercase;
   }
 
-  .crit-toolbar{display:flex; justify-content:flex-end; margin-bottom:10px;}
+  .crit-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;}
   .crit-edit-toggle{
     font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:.05em;
     color:var(--ink-light); background:none; border:none; padding:4px 6px;
     text-decoration:underline dotted; cursor:pointer;
   }
   .crit-edit-toggle:hover{background:none; color:var(--brass);}
+  .crit-reset-btn{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--stamp-red);
+    background:none; border:1px solid rgba(166,61,47,0.3); border-radius:2px; padding:4px 10px; cursor:pointer;
+  }
+  .crit-reset-btn:hover{background:rgba(166,61,47,0.1); color:var(--stamp-red);}
+
   .crit-editrow{display:flex; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap;}
   .weight-stepper{display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono', monospace; font-size:14px; color:var(--ink-light);}
   .weight-stepper button{padding:4px 10px; font-size:14px; line-height:1;}
@@ -283,7 +289,7 @@
 
   <div class="framework-note">
     STEP 1 誠實傾向偵測：若直覺已明確，可直接尊重直覺記錄，不必跑完整審查。<br>
-    STEP 3 第一層：任一條件成立即判處置的充分條件（可隨時編輯條款）。<br>
+    STEP 3 第一層：任一條件成立即判處置的充分條件（可隨時編輯或重設條款）。<br>
     STEP 4 第二層：加權綜合評估 — 各題可自訂方向與權重（1–5 分）。符合計入該方向，不符合計入對向，「不適用」不計分。<br>
     點擊歷史紀錄中的「重新審查」可讓項目重新進入審查流程，獲得新裁定。
   </div>
@@ -484,6 +490,7 @@ function renderStep3(c){
     <h2>是否符合以下任一條件？</h2>
     <p class="help">任一成立即構成充分理由，直接判定處置，無需再看下一層或答完其餘項目。</p>
     <div class="crit-toolbar">
+      <button class="crit-reset-btn" onclick="resetL1Criteria()">重設為預設準則</button>
       <button class="crit-edit-toggle" onclick="toggleEditL1()">${editL1?'完成編輯':'編輯準則'}</button>
     </div>
     <ul class="qlist" id="l1list">
@@ -547,6 +554,15 @@ function addL1(){
   saveCriteria();
   render();
 }
+function resetL1Criteria(){
+  if(confirm("確定要將第一層準則重設為預設項目嗎？")){
+    criteriaL1 = DEFAULT_L1.slice();
+    state.answersL1 = {};
+    saveCriteria();
+    render();
+    syncToGitHubSilently();
+  }
+}
 function afterStep3(){
   if(criteriaL1.some(cr => state.answersL1[cr.id]===true)){
     state.step = 5;
@@ -564,6 +580,7 @@ function renderStep4(c){
     <h2>逐項核對</h2>
     <p class="help">第一層未成立，需綜合評估。每題可設定方向與權重；「符合」計入該方向分數，「不符合」計入對向分數，「不適用」不計分。</p>
     <div class="crit-toolbar">
+      <button class="crit-reset-btn" onclick="resetL2Criteria()">重設為預設準則</button>
       <button class="crit-edit-toggle" onclick="toggleEditL2()">${editL2?'完成編輯':'編輯準則／權重'}</button>
     </div>
     <ul class="qlist" id="l2list">
@@ -676,6 +693,15 @@ function addL2(){
   newL2Weight = 1;
   saveCriteria();
   render();
+}
+function resetL2Criteria(){
+  if(confirm("確定要將第二層準則重設為預設項目嗎？")){
+    criteriaL2 = DEFAULT_L2.slice();
+    state.answersL2 = {};
+    saveCriteria();
+    render();
+    syncToGitHubSilently();
+  }
 }
 
 function computeVerdict(){
