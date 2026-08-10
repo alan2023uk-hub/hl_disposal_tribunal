@@ -31,7 +31,7 @@
     min-height:100vh;
     padding:32px 20px 80px;
   }
-  .wrap{max-width:980px; margin:0 auto;}
+  .wrap{max-width:850px; margin:0 auto;}
 
   header.top{
     display:flex; align-items:flex-end; justify-content:space-between;
@@ -40,97 +40,95 @@
   }
   header.top h1{
     font-family:'Noto Serif TC', serif; font-weight:900;
-    font-size:clamp(26px,4vw,38px); margin:0; letter-spacing:.04em;
+    font-size:clamp(28px,5vw,42px); margin:0; letter-spacing:.04em;
   }
   header.top .sub{
-    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-light);
+    font-family:'JetBrains Mono', monospace; font-size:14px; color:var(--ink-light);
     letter-spacing:.08em; text-transform:uppercase;
   }
   header.top .file-no{
-    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-faint);
+    font-family:'JetBrains Mono', monospace; font-size:14px; color:var(--ink-faint);
     text-align:right;
   }
 
   .gh-bar{
-    display:flex; justify-content:flex-end; align-items:center; gap:8px; margin-bottom:18px; flex-wrap:wrap;
+    display:flex; justify-content:flex-end; align-items:center; gap:12px; margin-bottom:24px; flex-wrap:wrap;
   }
   .gh-status{
-    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--ink-faint);
+    font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--ink-faint);
     margin-right:auto;
   }
 
-  .layout{display:grid; grid-template-columns:1.3fr 1fr; gap:28px; align-items:start;}
-  @media(max-width:800px){ .layout{grid-template-columns:1fr;} }
+  .view-hidden{display:none !important;}
 
   .card{
     background:var(--card);
     border:1px solid var(--line);
     box-shadow:0 1px 0 var(--line), 0 8px 22px -14px rgba(31,42,68,.35);
-    padding:26px 26px 22px;
+    padding:36px 36px 32px;
     position:relative;
+    width:100%;
   }
   .card::before{
     content:'';
-    position:absolute; inset:6px;
+    position:absolute; inset:8px;
     border:1px solid rgba(31,42,68,0.12);
     pointer-events:none;
   }
   .eyebrow{
-    font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--brass); margin-bottom:6px; font-weight:700;
+    font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--brass); margin-bottom:8px; font-weight:700;
   }
   h2{
-    font-family:'Noto Serif TC', serif; font-size:21px; margin:0 0 16px;
+    font-family:'Noto Serif TC', serif; font-size:26px; margin:0 0 20px;
     font-weight:700; color:var(--ink);
   }
-  p.help{color:var(--ink-light); font-size:14px; line-height:1.7; margin:0 0 18px;}
+  p.help{color:var(--ink-light); font-size:16px; line-height:1.7; margin:0 0 22px;}
 
   input[type=text], textarea{
-    width:100%; font-family:'Noto Sans TC', sans-serif; font-size:15px;
-    padding:10px 12px; border:1px solid var(--line); background:#fff;
+    width:100%; font-family:'Noto Sans TC', sans-serif; font-size:17px;
+    padding:12px 14px; border:1px solid var(--line); background:#fff;
     color:var(--ink); border-radius:2px;
   }
-  textarea{resize:vertical; min-height:60px;}
+  textarea{resize:vertical; min-height:80px;}
   label.field-label{
-    display:block; font-size:12.5px; color:var(--ink-light); margin:0 0 6px;
+    display:block; font-size:14px; color:var(--ink-light); margin:0 0 8px;
     font-weight:500; letter-spacing:.02em;
   }
-  .field{margin-bottom:18px;}
+  .field{margin-bottom:22px;}
 
-  .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;}
+  .btnrow{display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;}
   button{
-    font-family:'Noto Sans TC', sans-serif; font-size:14px; font-weight:500;
-    padding:10px 18px; border:1px solid var(--ink); background:transparent;
+    font-family:'Noto Sans TC', sans-serif; font-size:15px; font-weight:500;
+    padding:12px 20px; border:1px solid var(--ink); background:transparent;
     color:var(--ink); cursor:pointer; border-radius:2px; transition:all .15s ease;
   }
   button:hover{background:var(--ink); color:var(--paper);}
   button.primary{background:var(--ink); color:var(--card);}
   button.primary:hover{background:var(--ink-light); border-color:var(--ink-light);}
-  button.gh-save{background:#2da44e; border-color:#2da44e; color:#fff;}
-  button.gh-save:hover{background:#2c974b; border-color:#2c974b; color:#fff;}
   button.ghost{border-color:var(--line); color:var(--ink-light);}
   button.ghost:hover{background:var(--ink-light); color:var(--card); border-color:var(--ink-light);}
   button:disabled{opacity:.35; cursor:not-allowed;}
   button:disabled:hover{background:transparent; color:var(--ink);}
 
-  .tendency-choice{display:flex; gap:10px; flex-wrap:wrap;}
-  .tendency-choice button{flex:1; min-width:110px;}
+  .tendency-choice{display:flex; gap:12px; flex-wrap:wrap;}
+  .tendency-choice button{flex:1; min-width:130px; font-size:16px;}
   .tendency-choice button.sel{background:var(--brass); border-color:var(--brass); color:#fff;}
 
   .qlist{list-style:none; margin:0; padding:0;}
   .qlist li{
-    padding:12px 0; border-bottom:1px solid var(--line);
+    padding:16px 0; border-bottom:1px solid var(--line);
   }
   .qlist li:last-child{border-bottom:none;}
-  .qrow{display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center;}
-  .qtext{font-size:14.5px; line-height:1.6;}
+  .qrow{display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center;}
+  .qtext{font-size:16.5px; line-height:1.6;}
   .qtext .qnum{
     font-family:'JetBrains Mono', monospace; color:var(--brass); font-weight:700;
-    margin-right:6px;
+    margin-right:8px;
   }
   .seg{display:flex; border:1px solid var(--ink); border-radius:2px; overflow:hidden; flex-shrink:0;}
   .seg button{
-    border:none; border-right:1px solid var(--ink); padding:7px 12px; font-size:12.5px;
+    border:none; border-right:1px solid var(--ink); padding:8px 14px; font-size:14px;
     background:transparent; margin:0; border-radius:0;
   }
   .seg button:last-child{border-right:none;}
@@ -139,48 +137,46 @@
   .seg button.sel.no{background:var(--stamp-green); border-color:var(--stamp-green); color:#fff;}
   .seg button.sel.na{background:var(--ink-faint); border-color:var(--ink-faint); color:#fff;}
 
-  .stepnav{display:flex; justify-content:space-between; margin-top:22px;}
+  .stepnav{display:flex; justify-content:space-between; margin-top:28px;}
 
   .progress{
-    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--ink-faint);
-    letter-spacing:.1em; margin-bottom:16px; text-transform:uppercase;
+    font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--ink-faint);
+    letter-spacing:.1em; margin-bottom:18px; text-transform:uppercase;
   }
 
-  /* Criteria Editor Styling */
-  .crit-toolbar{display:flex; justify-content:flex-end; margin-bottom:8px;}
+  .crit-toolbar{display:flex; justify-content:flex-end; margin-bottom:10px;}
   .crit-edit-toggle{
-    font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.05em;
-    color:var(--ink-light); background:none; border:none; padding:2px 4px;
+    font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:.05em;
+    color:var(--ink-light); background:none; border:none; padding:4px 6px;
     text-decoration:underline dotted; cursor:pointer;
   }
   .crit-edit-toggle:hover{background:none; color:var(--brass);}
-  .crit-editrow{display:flex; align-items:center; gap:10px; margin-top:8px; flex-wrap:wrap;}
-  .weight-stepper{display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-light);}
-  .weight-stepper button{padding:2px 8px; font-size:12px; line-height:1;}
-  .weight-stepper .wval{min-width:14px; text-align:center; font-weight:700; color:var(--ink);}
+  .crit-editrow{display:flex; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap;}
+  .weight-stepper{display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono', monospace; font-size:14px; color:var(--ink-light);}
+  .weight-stepper button{padding:4px 10px; font-size:14px; line-height:1;}
+  .weight-stepper .wval{min-width:16px; text-align:center; font-weight:700; color:var(--ink);}
   .dir-toggle{display:flex; border:1px solid var(--line); border-radius:2px; overflow:hidden;}
-  .dir-toggle button{border:none; padding:4px 10px; font-size:11.5px; margin:0; border-radius:0;}
+  .dir-toggle button{border:none; padding:6px 12px; font-size:13px; margin:0; border-radius:0;}
   .dir-toggle button.sel.dispose{background:var(--stamp-red); color:#fff;}
   .dir-toggle button.sel.keep{background:var(--stamp-green); color:#fff;}
   .crit-del{
-    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-faint);
-    background:none; border:none; padding:2px 6px; cursor:pointer;
+    font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--ink-faint);
+    background:none; border:none; padding:4px 8px; cursor:pointer;
   }
   .crit-del:hover{background:none; color:var(--stamp-red);}
-  .crit-text-edit{font-size:13.5px; padding:6px 8px; margin-top:6px;}
+  .crit-text-edit{font-size:15px; padding:8px 10px; margin-top:8px;}
   .crit-add{
-    margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);
+    margin-top:18px; padding-top:18px; border-top:1px dashed var(--line);
   }
-  .crit-add .btnrow{margin-top:10px;}
-  .crit-add input[type=text]{margin-bottom:8px;}
+  .crit-add .btnrow{margin-top:12px;}
+  .crit-add input[type=text]{margin-bottom:10px;}
 
-  /* Verdict Stamp */
-  .verdict-box{text-align:center; padding:10px 0 4px;}
+  .verdict-box{text-align:center; padding:14px 0 8px;}
   .stamp{
-    display:inline-block; border:5px double; border-radius:50%;
-    width:150px; height:150px; display:flex; align-items:center; justify-content:center;
+    display:inline-block; border:6px double; border-radius:50%;
+    width:180px; height:180px; display:flex; align-items:center; justify-content:center;
     flex-direction:column; transform:rotate(-9deg); font-family:'Noto Serif TC', serif;
-    font-weight:900; margin:6px auto 14px; animation:stamp-in .35s ease-out;
+    font-weight:900; margin:10px auto 20px; animation:stamp-in .35s ease-out;
   }
   @keyframes stamp-in{
     0%{transform:rotate(-9deg) scale(1.6); opacity:0;}
@@ -189,65 +185,63 @@
   .stamp.dispose{border-color:var(--stamp-red); color:var(--stamp-red);}
   .stamp.keep{border-color:var(--stamp-green); color:var(--stamp-green);}
   .stamp.split{border-color:var(--brass); color:var(--brass);}
-  .stamp .big{font-size:28px; letter-spacing:.06em;}
-  .stamp .small{font-size:11px; font-family:'JetBrains Mono', monospace; letter-spacing:.1em; margin-top:4px;}
+  .stamp .big{font-size:34px; letter-spacing:.06em;}
+  .stamp .small{font-size:13px; font-family:'JetBrains Mono', monospace; letter-spacing:.1em; margin-top:6px;}
 
-  .reason-list{text-align:left; font-size:13.5px; line-height:1.8; color:var(--ink-light); margin-top:10px;}
-  .reason-list b{color:var(--ink);}
+  .reason-list{text-align:left; font-size:15.5px; line-height:1.8; color:var(--ink-light); margin-top:14px;}
   .warn{
     background:rgba(166,61,47,0.08); border-left:3px solid var(--stamp-red);
-    padding:10px 14px; font-size:13px; color:var(--ink); margin-top:14px; line-height:1.7;
+    padding:14px 18px; font-size:15px; color:var(--ink); margin-top:18px; line-height:1.7;
   }
 
-  /* Ledger Scrollable & Action Buttons */
-  .ledger h2{margin-bottom:10px;}
-  .ledger-filter{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;}
+  .ledger h2{margin-bottom:14px;}
+  .ledger-filter{display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap;}
   .ledger-filter button{
-    padding:4px 10px; font-size:12px; border:1px solid var(--line); border-radius:12px;
+    padding:6px 14px; font-size:14px; border:1px solid var(--line); border-radius:14px;
   }
   .ledger-filter button.active{
     background:var(--ink); color:var(--card); border-color:var(--ink);
   }
   .ledger-scroll{
-    max-height:500px;
+    max-height:600px;
     overflow-y:auto;
-    padding-right:6px;
+    padding-right:8px;
   }
-  .ledger-scroll::-webkit-scrollbar { width:5px; }
+  .ledger-scroll::-webkit-scrollbar { width:6px; }
   .ledger-scroll::-webkit-scrollbar-track { background:transparent; }
   .ledger-scroll::-webkit-scrollbar-thumb { background:var(--line); border-radius:3px; }
 
-  .ledger-empty{color:var(--ink-faint); font-size:13.5px; padding:20px 0; text-align:center;}
+  .ledger-empty{color:var(--ink-faint); font-size:15px; padding:24px 0; text-align:center;}
   .entry{
-    border-bottom:1px solid var(--line); padding:14px 0; cursor:pointer;
+    border-bottom:1px solid var(--line); padding:18px 0; cursor:pointer;
   }
   .entry:last-child{border-bottom:none;}
-  .entry-top{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
-  .entry-name{font-weight:700; font-size:14.5px;}
+  .entry-top{display:flex; justify-content:space-between; align-items:baseline; gap:12px;}
+  .entry-name{font-weight:700; font-size:17px;}
   .entry-verdict{
-    font-family:'JetBrains Mono', monospace; font-size:11px; padding:2px 8px;
-    border-radius:10px; white-space:nowrap; font-weight:700;
+    font-family:'JetBrains Mono', monospace; font-size:12px; padding:4px 10px;
+    border-radius:12px; white-space:nowrap; font-weight:700;
   }
   .entry-verdict.dispose{background:rgba(166,61,47,0.14); color:var(--stamp-red);}
   .entry-verdict.keep{background:rgba(63,107,74,0.14); color:var(--stamp-green);}
   .entry-verdict.split{background:rgba(169,136,79,0.16); color:var(--brass);}
-  .entry-date{font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--ink-faint); margin-top:3px;}
+  .entry-date{font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-faint); margin-top:4px;}
   .entry-detail{
-    display:none; font-size:12.5px; color:var(--ink-light); line-height:1.7; margin-top:8px;
+    display:none; font-size:14.5px; color:var(--ink-light); line-height:1.7; margin-top:10px;
     white-space:pre-line;
   }
   .entry.open .entry-detail{display:block;}
-  .entry-actions{display:flex; gap:10px; margin-top:8px;}
+  .entry-actions{display:flex; gap:12px; margin-top:10px;}
   .entry-btn{
-    font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--ink-faint);
-    background:none; border:none; padding:2px 4px; cursor:pointer; text-decoration:underline;
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-faint);
+    background:none; border:none; padding:4px 6px; cursor:pointer; text-decoration:underline;
   }
   .entry-btn.edit:hover{color:var(--ink);}
   .entry-btn.del:hover{color:var(--stamp-red);}
 
   .framework-note{
-    margin-top:26px; font-size:12px; color:var(--ink-faint); line-height:1.8;
-    border-top:1px dashed var(--line); padding-top:14px;
+    margin-top:32px; font-size:14px; color:var(--ink-faint); line-height:1.8;
+    border-top:1px dashed var(--line); padding-top:18px;
   }
 </style>
 </head>
@@ -264,26 +258,26 @@
 
   <div class="gh-bar">
     <div class="gh-status" id="ghStatus"></div>
-    <button id="ghConfigBtn" onclick="configGitHub()" class="ghost">設定 GitHub Token</button>
+    <button id="ghConfigBtn" onclick="configGitHub()" class="ghost">設定 GitHub</button>
+    <button id="navLedgerBtn" onclick="switchView('ledger')" class="ghost">紀錄清單</button>
+    <button id="navFormBtn" onclick="switchView('form')" class="ghost view-hidden">返回審查</button>
   </div>
 
-  <div class="layout">
-    <!-- FORM CARD -->
-    <div class="card" id="formCard"></div>
+  <!-- FORM CARD -->
+  <div class="card" id="formCard"></div>
 
-    <!-- LEDGER -->
-    <div class="card ledger">
-      <div class="eyebrow">歷史紀錄</div>
-      <h2>裁定存檔</h2>
-      <div class="ledger-filter">
-        <button class="active" onclick="setFilter('all', this)">全部</button>
-        <button onclick="setFilter('keep', this)">保留</button>
-        <button onclick="setFilter('dispose', this)">處置</button>
-        <button onclick="setFilter('split', this)">拆分</button>
-      </div>
-      <div class="ledger-scroll" id="ledgerList">
-        <div class="ledger-empty">尚未有存檔紀錄</div>
-      </div>
+  <!-- LEDGER -->
+  <div class="card ledger view-hidden" id="ledgerCard">
+    <div class="eyebrow">歷史紀錄</div>
+    <h2>裁定存檔</h2>
+    <div class="ledger-filter">
+      <button class="active" onclick="setFilter('all', this)">全部</button>
+      <button onclick="setFilter('keep', this)">保留</button>
+      <button onclick="setFilter('dispose', this)">處置</button>
+      <button onclick="setFilter('split', this)">拆分</button>
+    </div>
+    <div class="ledger-scroll" id="ledgerList">
+      <div class="ledger-empty">尚未有存檔紀錄</div>
     </div>
   </div>
 
@@ -307,7 +301,6 @@ let currentFilter = 'all';
 let editL1 = false;
 let editL2 = false;
 
-/* ---------- Default Seed Criteria ---------- */
 const DEFAULT_L1 = [
   { id:'l1-1', text:'已過期／已失去安全使用期限' },
   { id:'l1-2', text:'已損壞至無法修復，且維修成本高於重置成本' },
@@ -325,17 +318,37 @@ const DEFAULT_L2 = [
 let criteriaL1 = [];
 let criteriaL2 = [];
 
+function switchView(view) {
+  const formCard = document.getElementById('formCard');
+  const ledgerCard = document.getElementById('ledgerCard');
+  const navLedger = document.getElementById('navLedgerBtn');
+  const navForm = document.getElementById('navFormBtn');
+
+  if (view === 'form') {
+    formCard.classList.remove('view-hidden');
+    ledgerCard.classList.add('view-hidden');
+    navLedger.classList.remove('view-hidden');
+    navForm.classList.add('view-hidden');
+  } else {
+    formCard.classList.add('view-hidden');
+    ledgerCard.classList.remove('view-hidden');
+    navLedger.classList.add('view-hidden');
+    navForm.classList.remove('view-hidden');
+    renderLedger();
+  }
+}
+
 function resetState(){
   state = {
     step:0,
     name:'',
-    editingId: null,   // 追蹤是否為「重新審查」項目
-    tendency:null,     // 'keep' | 'dispose' | 'unsure'
+    editingId: null,
+    tendency:null,
     trustInstinct:null,
     splittable:null,
     splitNote:'',
-    answersL1:{},      // id -> true/false
-    answersL2:{},      // id -> true/false/'na'
+    answersL1:{},
+    answersL2:{},
   };
 }
 resetState();
@@ -348,6 +361,7 @@ function render(){
   if(state.step===3) return renderStep3(c);
   if(state.step===4) return renderStep4(c);
   if(state.step===5) return renderVerdict(c);
+  if(state.step===6) return renderSaved(c);
 }
 
 function renderStep0(c){
@@ -363,7 +377,7 @@ function renderStep0(c){
       <button class="primary" onclick="submitName()">開始審查 →</button>
     </div>
   `;
-  document.getElementById('itemName').focus();
+  setTimeout(() => document.getElementById('itemName').focus(), 50);
 }
 function submitName(){
   const v = document.getElementById('itemName').value.trim();
@@ -374,7 +388,7 @@ function submitName(){
 }
 
 function renderStep1(c){
-  const editingTag = state.editingId ? ' <span style="color:var(--brass);font-size:13px;">[重新審查中]</span>' : '';
+  const editingTag = state.editingId ? ' <span style="color:var(--brass);font-size:15px;">[重新審查中]</span>' : '';
   c.innerHTML = `
     <div class="progress">STEP 1 / 5 · 誠實傾向偵測</div>
     <h2>「${escapeHtml(state.name)}」${editingTag} — 你內心本來的傾向？</h2>
@@ -407,7 +421,7 @@ function renderTendencyFollow(){
     return;
   }
   el.innerHTML = `
-    <div class="field" style="margin-top:14px;">
+    <div class="field" style="margin-top:20px;">
       <label class="field-label">既然傾向已經明確，是否仍要跑完整審查（誠實核對理由），還是尊重直覺、直接記錄？</label>
       <div class="btnrow">
         <button onclick="setTrust(true)" class="${state.trustInstinct===true?'sel':''}">尊重直覺，直接記錄</button>
@@ -440,7 +454,7 @@ function renderStep2(c){
       <button onclick="setSplit(false)" class="${state.splittable===false?'sel':''}">不可拆分／整體判斷</button>
     </div>
     ${state.splittable ? `
-    <div class="field" style="margin-top:14px;">
+    <div class="field" style="margin-top:20px;">
       <label class="field-label">說明：哪部分保留，哪部分處置？</label>
       <textarea id="splitNote" oninput="state.splitNote=this.value">${escapeHtml(state.splitNote)}</textarea>
     </div>` : ''}
@@ -461,7 +475,6 @@ function afterStep2(){
   render();
 }
 
-/* ---------- STEP 3: L1 Short-Circuit (Editable) ---------- */
 function renderStep3(c){
   const allAnswered = criteriaL1.every(cr => state.answersL1[cr.id]!==undefined);
   const anyYes = criteriaL1.some(cr => state.answersL1[cr.id]===true);
@@ -544,7 +557,6 @@ function afterStep3(){
   render();
 }
 
-/* ---------- STEP 4: L2 Weighted System (Editable) ---------- */
 function renderStep4(c){
   const allAnswered = criteriaL2.every(cr => state.answersL2[cr.id]!==undefined);
   c.innerHTML = `
@@ -571,7 +583,7 @@ function renderL2Item(cr,i){
     <li>
       <div class="qrow">
         <div class="qtext"><span class="qnum">${i+1}</span>${escapeHtml(cr.text)}
-          <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-faint); margin-left:6px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-faint); margin-left:8px;">
             [${cr.direction==='dispose'?'傾向處置':'傾向保留'} · 權重 ${cr.weight}]
           </span>
         </div>
@@ -666,7 +678,6 @@ function addL2(){
   render();
 }
 
-/* ---------- Verdict Calculation ---------- */
 function computeVerdict(){
   if(state.splittable===true){
     return {
@@ -698,7 +709,7 @@ function computeVerdict(){
   let type, title, sub;
   if(disposeScore > keepScore){ type='dispose'; title='傾向處置'; sub='LEAN DISPOSE · LAYER 2'; }
   else if(keepScore > disposeScore){ type='keep'; title='傾向保留'; sub='LEAN KEEP · LAYER 2'; }
-  else { type='keep'; title='勢均力敵（預設保留，留待下次覆核）'; sub='TIE · LAYER 2'; }
+  else { type='keep'; title='勢均力敵（預設保留）'; sub='TIE · LAYER 2'; }
 
   const reasons = [
     `第二層加權分數：傾向處置 ${disposeScore} 分／傾向保留 ${keepScore} 分`,
@@ -718,7 +729,7 @@ function renderVerdict(c){
   const v = computeVerdict();
   const conflictWarn = (state.tendency && state.tendency!=='unsure' &&
     ((state.tendency==='keep' && v.type==='dispose') || (state.tendency==='dispose' && v.type==='keep')))
-    ? `<div class="warn">提醒：您原先的直覺傾向是「${state.tendency==='keep'?'想留':'想丟'}」，但客觀評估結果是「${v.title}」。建議誠實檢視：這份猶豫，究竟是理由不足，還是單純情感/習慣？</div>`
+    ? `<div class="warn">提醒：直覺為「${state.tendency==='keep'?'想留':'想丟'}」，客觀結果為「${v.title}」。</div>`
     : '';
 
   c.innerHTML = `
@@ -734,9 +745,8 @@ function renderVerdict(c){
       </div>
       ${conflictWarn}
     </div>
-    <div class="btnrow" style="justify-content:center; margin-top:20px;">
+    <div class="btnrow" style="justify-content:center; margin-top:24px;">
       <button class="primary" onclick="saveEntry()">存入紀錄</button>
-      <button class="ghost" onclick="startNew()">審查下一件</button>
     </div>
   `;
 }
@@ -755,9 +765,8 @@ function finalizeInstinct(){
       </div>
       <div class="reason-list"><div>未跑完整審查，尊重既定直覺傾向。</div></div>
     </div>
-    <div class="btnrow" style="justify-content:center; margin-top:20px;">
+    <div class="btnrow" style="justify-content:center; margin-top:24px;">
       <button class="primary" onclick="saveEntryDirect('${type}','${escapeHtml(label)}')">存入紀錄</button>
-      <button class="ghost" onclick="startNew()">審查下一件</button>
     </div>
   `;
 }
@@ -765,14 +774,27 @@ function finalizeInstinct(){
 function saveEntryDirect(type,label){
   addOrUpdateLedgerEntry(state.name, type, label);
   syncToGitHubSilently();
-  startNew();
+  state.step = 6;
+  render();
 }
 function saveEntry(){
   const v = computeVerdict();
   const detail = v.reasons.join('\n');
   addOrUpdateLedgerEntry(state.name, v.type, `${v.title}\n${detail}`);
   syncToGitHubSilently();
-  startNew();
+  state.step = 6;
+  render();
+}
+
+function renderSaved(c){
+  c.innerHTML = `
+    <div class="progress">存檔完成</div>
+    <h2>已成功存入紀錄</h2>
+    <div class="btnrow" style="justify-content:center; margin-top:30px; gap:16px;">
+      <button class="primary" onclick="startNew()">審查下一件</button>
+      <button class="ghost" onclick="switchView('ledger')">查看紀錄清單</button>
+    </div>
+  `;
 }
 
 function startNew(){
@@ -786,18 +808,17 @@ function goBack(){
   render();
 }
 
-/* ---------- Re-evaluate Existing Entry ---------- */
 function reexamineEntry(id){
   const entry = ledger.find(e => e.id === id);
   if(!entry) return;
   resetState();
   state.editingId = id;
   state.name = entry.name;
-  state.step = 1; // 直接跳到 STEP 1 開始重新審查
+  state.step = 1; 
+  switchView('form');
   render();
 }
 
-/* ---------- Criteria Persistence ---------- */
 function loadCriteria(){
   try {
     const raw = localStorage.getItem(CRITERIA_KEY);
@@ -807,17 +828,16 @@ function loadCriteria(){
       criteriaL2 = Array.isArray(parsed.l2) && parsed.l2.length ? parsed.l2 : DEFAULT_L2.slice();
       return;
     }
-  } catch(e){ console.error('Criteria load failed', e); }
+  } catch(e){}
   criteriaL1 = DEFAULT_L1.slice();
   criteriaL2 = DEFAULT_L2.slice();
 }
 function saveCriteria(){
   try {
     localStorage.setItem(CRITERIA_KEY, JSON.stringify({ l1:criteriaL1, l2:criteriaL2 }));
-  } catch(e){ console.error('Criteria save failed', e); }
+  } catch(e){}
 }
 
-/* ---------- Persistence & GitHub Sync ---------- */
 function getGHConfig(){
   const cfg = localStorage.getItem(GH_CONFIG_KEY);
   return cfg ? JSON.parse(cfg) : null;
@@ -835,9 +855,7 @@ async function fetchGitHubUser(token){
       const data = await res.json();
       return data.login;
     }
-  } catch(e) {
-    console.error("無法取得 GitHub 用戶資訊:", e);
-  }
+  } catch(e){}
   return null;
 }
 
@@ -853,7 +871,7 @@ async function configGitHub(){
 
   const owner = await fetchGitHubUser(token);
   if(!owner){
-    alert("Token 驗證失敗，請重新檢查您的 Token 權限。");
+    alert("Token 驗證失敗。");
     return false;
   }
 
@@ -917,27 +935,21 @@ async function loadFromGitHub(){
       renderLedger();
       return true;
     }
-  } catch(e) {
-    console.error("GitHub 連線失敗:", e);
-  }
+  } catch(e){}
   return false;
 }
 
 function saveToLocalStorage(){
   try {
     localStorage.setItem(LEDGER_KEY, JSON.stringify(ledger));
-  } catch(e) {
-    console.error('Local save failed', e);
-  }
+  } catch(e){}
 }
 
 function loadFromLocalStorage(){
   try {
     const data = localStorage.getItem(LEDGER_KEY);
     if(data) ledger = JSON.parse(data);
-  } catch(e) {
-    console.error('Local load failed', e);
-  }
+  } catch(e){}
   renderLedger();
 }
 
@@ -968,9 +980,7 @@ function addOrUpdateLedgerEntry(name, verdictType, detail){
 
 function deleteEntry(id){
   const entry = ledger.find(e => e.id === id);
-  const name = entry ? entry.name : '此項目';
-
-  if (confirm(`確定要刪除「${name}」的裁定紀錄嗎？`)) {
+  if (confirm(`確定要刪除「${entry ? entry.name : '此項目'}」的紀錄嗎？`)) {
     ledger = ledger.filter(e => e.id !== id);
     saveToLocalStorage();
     renderLedger();
@@ -982,9 +992,7 @@ async function syncToGitHubSilently(){
   const cfg = getGHConfig();
   if(!cfg || !cfg.token) return;
 
-  if(!ghSHA){
-    await loadFromGitHub();
-  }
+  if(!ghSHA) await loadFromGitHub();
 
   const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
   const payload = { ledger, criteria: { l1:criteriaL1, l2:criteriaL2 } };
@@ -1011,14 +1019,9 @@ async function syncToGitHubSilently(){
     if(res.ok){
       const resData = await res.json();
       ghSHA = resData.content.sha;
-      if(statusEl) statusEl.textContent = `已連接：${cfg.owner}/${cfg.repo} · 已同步 ${new Date().toLocaleTimeString('zh-Hant',{hour12:false})}`;
-    } else {
-      const err = await res.json();
-      if(statusEl) statusEl.textContent = `同步失敗：${err.message}`;
+      if(statusEl) statusEl.textContent = `已連接：${cfg.owner}/${cfg.repo} · 已同步`;
     }
-  } catch(e) {
-    if(statusEl) statusEl.textContent = `同步出錯：${e.message}`;
-  }
+  } catch(e){}
 }
 
 function setFilter(filterType, btnEl){
@@ -1034,7 +1037,7 @@ function renderLedger(){
   document.getElementById('fileNo').textContent = '案卷編號 №' + String(ledger.length).padStart(3,'0');
 
   if(ledger.length===0){
-    el.innerHTML = '<div class="ledger-empty">尚未有存檔紀錄</div>';
+    el.innerHTML = '<div class="ledger-empty">尚未有紀錄</div>';
     return;
   }
 
