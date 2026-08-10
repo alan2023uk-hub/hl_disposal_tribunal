@@ -586,19 +586,44 @@ function getGHConfig(){
   return cfg ? JSON.parse(cfg) : null;
 }
 
-function configGitHub(){
-  const cfg = getGHConfig() || {};
-  const owner = prompt("請輸入 GitHub Username:", cfg.owner || "");
-  const repo = prompt("請輸入 Repository 名稱:", cfg.repo || "");
-  const path = prompt("請輸入 JSON 檔案路徑 (預設 data.json):", cfg.path || "data.json");
-  const token = prompt("請輸入 GitHub Personal Access Token:", cfg.token || "");
-
-  if(owner && repo && token){
-    const config = { owner, repo, path: path || "data.json", token };
-    localStorage.setItem(GH_CONFIG_KEY, JSON.stringify(config));
-    alert("GitHub 設定已儲存！");
-    loadFromGitHub();
+async function fetchGitHubUser(token){
+  try {
+    const res = await fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    if(res.ok){
+      const data = await res.json();
+      return data.login;
+    }
+  } catch(e) {
+    console.error("無法取得 GitHub 用戶資訊:", e);
   }
+  return null;
+}
+
+async function configGitHub(){
+  const cfg = getGHConfig() || {};
+  const token = prompt("請輸入 GitHub Personal Access Token:", cfg.token || "");
+  if(!token) return;
+
+  const repo = prompt("請輸入 Repository 名稱:", cfg.repo || "");
+  if(!repo) return;
+
+  const path = prompt("請輸入 JSON 檔案路徑 (預設 data.json):", cfg.path || "data.json");
+
+  const owner = await fetchGitHubUser(token);
+  if(!owner){
+    alert("Token 驗證失敗，請重新檢查您的 Token 權限。");
+    return;
+  }
+
+  const config = { owner, repo, path: path || "data.json", token };
+  localStorage.setItem(GH_CONFIG_KEY, JSON.stringify(config));
+  alert(`GitHub 設定完成！已自動對接帳號：${owner}`);
+  loadFromGitHub();
 }
 
 async function loadLedger(){
