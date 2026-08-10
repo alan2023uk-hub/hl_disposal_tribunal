@@ -191,7 +191,7 @@
   .entry.open .entry-detail{display:block;}
   .entry-del{
     font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--ink-faint);
-    background:none; border:none; padding:2px 4px; margin-top:6px;
+    background:none; border:none; padding:2px 4px; margin-top:6px; cursor:pointer;
   }
   .entry-del:hover{background:none; color:var(--stamp-red);}
 
@@ -692,9 +692,14 @@ function addLedgerEntry(name, verdictType, detail){
 }
 
 function deleteEntry(id){
-  ledger = ledger.filter(e => e.id !== id);
-  saveToLocalStorage();
-  renderLedger();
+  const entry = ledger.find(e => e.id === id);
+  const name = entry ? entry.name : '此項目';
+  
+  if (confirm(`確定要刪除「${name}」的裁定紀錄嗎？`)) {
+    ledger = ledger.filter(e => e.id !== id);
+    saveToLocalStorage();
+    renderLedger();
+  }
 }
 
 async function saveToGitHub(){
