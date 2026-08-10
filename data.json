@@ -1,6 +1,13 @@
 {
   "ledger": [
     {
+      "id": "i1786389761394",
+      "name": "carbon fibre 坐鞍",
+      "verdictType": "keep",
+      "detail": "保留（尊重直覺）",
+      "date": "2026/8/10 20:22:41"
+    },
+    {
       "id": "i1786389126057",
       "name": "USB鍵盤",
       "verdictType": "dispose",
