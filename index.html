@@ -146,7 +146,7 @@
     letter-spacing:.1em; margin-bottom:16px; text-transform:uppercase;
   }
 
-  /* criteria edit UI */
+  /* Criteria Editor Styling */
   .crit-toolbar{display:flex; justify-content:flex-end; margin-bottom:8px;}
   .crit-edit-toggle{
     font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.05em;
@@ -174,7 +174,7 @@
   .crit-add .btnrow{margin-top:10px;}
   .crit-add input[type=text]{margin-bottom:8px;}
 
-  /* verdict stamp */
+  /* Verdict Stamp */
   .verdict-box{text-align:center; padding:10px 0 4px;}
   .stamp{
     display:inline-block; border:5px double; border-radius:50%;
@@ -199,7 +199,7 @@
     padding:10px 14px; font-size:13px; color:var(--ink); margin-top:14px; line-height:1.7;
   }
 
-  /* ledger */
+  /* Ledger Scrollable & Action Buttons */
   .ledger h2{margin-bottom:10px;}
   .ledger-filter{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;}
   .ledger-filter button{
@@ -237,11 +237,13 @@
     white-space:pre-line;
   }
   .entry.open .entry-detail{display:block;}
-  .entry-del{
+  .entry-actions{display:flex; gap:10px; margin-top:8px;}
+  .entry-btn{
     font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--ink-faint);
-    background:none; border:none; padding:2px 4px; margin-top:6px; cursor:pointer;
+    background:none; border:none; padding:2px 4px; cursor:pointer; text-decoration:underline;
   }
-  .entry-del:hover{background:none; color:var(--stamp-red);}
+  .entry-btn.edit:hover{color:var(--ink);}
+  .entry-btn.del:hover{color:var(--stamp-red);}
 
   .framework-note{
     margin-top:26px; font-size:12px; color:var(--ink-faint); line-height:1.8;
@@ -255,13 +257,14 @@
   <header class="top">
     <div>
       <h1>去留裁定</h1>
-      <div class="sub">Disposal Interrogation Tribunal · 可調式審查架構</div>
+      <div class="sub">Disposal Interrogation Tribunal · 可調式加權審查架構</div>
     </div>
     <div class="file-no" id="fileNo">案卷編號 —</div>
   </header>
 
   <div class="gh-bar">
     <div class="gh-status" id="ghStatus"></div>
+    <button onclick="configGitHub()" class="ghost">設定 GitHub Token</button>
   </div>
 
   <div class="layout">
@@ -286,9 +289,9 @@
 
   <div class="framework-note">
     STEP 1 誠實傾向偵測：若直覺已明確，可直接尊重直覺記錄，不必跑完整審查。<br>
-    STEP 3 第一層：任一條件成立即判處置的充分條件（可自行增刪修改）。<br>
-    STEP 4 第二層：加權綜合評估 — 各題可設定方向（傾向處置／傾向保留）與權重（1–5），符合方向者計分，不符合者計入對向；「不適用」不計分。分數高的一方勝出，平手預設保留。<br>
-    所有準則皆可在對應步驟按「編輯準則」增刪修改，並會隨存檔一併同步至 GitHub。
+    STEP 3 第一層：任一條件成立即判處置的充分條件（可隨時編輯條款）。<br>
+    STEP 4 第二層：加權綜合評估 — 各題可自訂方向與權重（1–5 分）。符合計入該方向，不符合計入對向，「不適用」不計分。<br>
+    點擊歷史紀錄中的「重新審查」可讓項目重新進入審查流程，獲得新裁定。
   </div>
 </div>
 
@@ -304,7 +307,7 @@ let currentFilter = 'all';
 let editL1 = false;
 let editL2 = false;
 
-/* ---------- Default seed criteria ---------- */
+/* ---------- Default Seed Criteria ---------- */
 const DEFAULT_L1 = [
   { id:'l1-1', text:'已過期／已失去安全使用期限' },
   { id:'l1-2', text:'已損壞至無法修復，且維修成本高於重置成本' },
@@ -326,6 +329,7 @@ function resetState(){
   state = {
     step:0,
     name:'',
+    editingId: null,   // 追蹤是否為「重新審查」項目
     tendency:null,     // 'keep' | 'dispose' | 'unsure'
     trustInstinct:null,
     splittable:null,
@@ -370,9 +374,10 @@ function submitName(){
 }
 
 function renderStep1(c){
+  const editingTag = state.editingId ? ' <span style="color:var(--brass);font-size:13px;">[重新審查中]</span>' : '';
   c.innerHTML = `
     <div class="progress">STEP 1 / 5 · 誠實傾向偵測</div>
-    <h2>「${escapeHtml(state.name)}」— 你內心本來的傾向？</h2>
+    <h2>「${escapeHtml(state.name)}」${editingTag} — 你內心本來的傾向？</h2>
     <p class="help">在套用任何標準之前，先誠實回答。若傾向已很明確，標準測試容易變成事後找理由。</p>
     <div class="tendency-choice">
       <button onclick="setTendency('keep')" class="${state.tendency==='keep'?'sel':''}">本來就想留</button>
@@ -456,7 +461,7 @@ function afterStep2(){
   render();
 }
 
-/* ---------- STEP 3: L1 short-circuit (editable) ---------- */
+/* ---------- STEP 3: L1 Short-Circuit (Editable) ---------- */
 function renderStep3(c){
   const allAnswered = criteriaL1.every(cr => state.answersL1[cr.id]!==undefined);
   const anyYes = criteriaL1.some(cr => state.answersL1[cr.id]===true);
@@ -539,13 +544,13 @@ function afterStep3(){
   render();
 }
 
-/* ---------- STEP 4: L2 weighted (editable) ---------- */
+/* ---------- STEP 4: L2 Weighted System (Editable) ---------- */
 function renderStep4(c){
   const allAnswered = criteriaL2.every(cr => state.answersL2[cr.id]!==undefined);
   c.innerHTML = `
     <div class="progress">STEP 4 / 5 · 第二層：加權綜合評估</div>
     <h2>逐項核對</h2>
-    <p class="help">第一層未成立，需綜合評估。每題可設定方向（傾向處置／傾向保留）與權重；「符合」計入該方向分數，「不符合」計入對向分數，「不適用」不計分。</p>
+    <p class="help">第一層未成立，需綜合評估。每題可設定方向與權重；「符合」計入該方向分數，「不符合」計入對向分數，「不適用」不計分。</p>
     <div class="crit-toolbar">
       <button class="crit-edit-toggle" onclick="toggleEditL2()">${editL2?'完成編輯':'編輯準則／權重'}</button>
     </div>
@@ -661,7 +666,7 @@ function addL2(){
   render();
 }
 
-/* ---------- Verdict ---------- */
+/* ---------- Verdict Calculation ---------- */
 function computeVerdict(){
   if(state.splittable===true){
     return {
@@ -758,14 +763,14 @@ function finalizeInstinct(){
 }
 
 function saveEntryDirect(type,label){
-  addLedgerEntry(state.name, type, label);
+  addOrUpdateLedgerEntry(state.name, type, label);
   syncToGitHubSilently();
   startNew();
 }
 function saveEntry(){
   const v = computeVerdict();
   const detail = v.reasons.join('\n');
-  addLedgerEntry(state.name, v.type, `${v.title}\n${detail}`);
+  addOrUpdateLedgerEntry(state.name, v.type, `${v.title}\n${detail}`);
   syncToGitHubSilently();
   startNew();
 }
@@ -781,7 +786,18 @@ function goBack(){
   render();
 }
 
-/* ---------- Criteria persistence ---------- */
+/* ---------- Re-evaluate Existing Entry ---------- */
+function reexamineEntry(id){
+  const entry = ledger.find(e => e.id === id);
+  if(!entry) return;
+  resetState();
+  state.editingId = id;
+  state.name = entry.name;
+  state.step = 1; // 直接跳到 STEP 1 開始重新審查
+  render();
+}
+
+/* ---------- Criteria Persistence ---------- */
 function loadCriteria(){
   try {
     const raw = localStorage.getItem(CRITERIA_KEY);
@@ -882,7 +898,6 @@ async function loadFromGitHub(){
       const content = decodeURIComponent(escape(atob(data.content)));
       const parsed = JSON.parse(content);
       if(Array.isArray(parsed)){
-        // legacy format: plain ledger array, no criteria payload
         ledger = parsed;
       } else {
         ledger = Array.isArray(parsed.ledger) ? parsed.ledger : [];
@@ -919,13 +934,27 @@ function loadFromLocalStorage(){
   renderLedger();
 }
 
-function addLedgerEntry(name, verdictType, detail){
-  const entry = {
-    id: 'i' + Date.now(),
-    name, verdictType, detail,
-    date: new Date().toLocaleString('zh-Hant', {hour12:false})
-  };
-  ledger.unshift(entry);
+function addOrUpdateLedgerEntry(name, verdictType, detail){
+  const nowStr = new Date().toLocaleString('zh-Hant', {hour12:false});
+  if(state.editingId){
+    const idx = ledger.findIndex(e => e.id === state.editingId);
+    if(idx !== -1){
+      ledger[idx] = {
+        ...ledger[idx],
+        name,
+        verdictType,
+        detail,
+        date: nowStr + ' (重新裁定)'
+      };
+    }
+  } else {
+    const entry = {
+      id: 'i' + Date.now(),
+      name, verdictType, detail,
+      date: nowStr
+    };
+    ledger.unshift(entry);
+  }
   saveToLocalStorage();
   renderLedger();
 }
@@ -944,7 +973,7 @@ function deleteEntry(id){
 
 async function syncToGitHubSilently(){
   const cfg = getGHConfig();
-  if(!cfg || !cfg.token) return; // no device config yet — nothing to sync to
+  if(!cfg || !cfg.token) return;
 
   if(!ghSHA){
     await loadFromGitHub();
@@ -1019,7 +1048,10 @@ function renderLedger(){
       </div>
       <div class="entry-date">${e.date}</div>
       <div class="entry-detail">${escapeHtml(e.detail)}</div>
-      <button class="entry-del" onclick="event.stopPropagation(); deleteEntry('${e.id}')">刪除紀錄</button>
+      <div class="entry-actions">
+        <button class="entry-btn edit" onclick="event.stopPropagation(); reexamineEntry('${e.id}')">重新審查</button>
+        <button class="entry-btn del" onclick="event.stopPropagation(); deleteEntry('${e.id}')">刪除紀錄</button>
+      </div>
     </div>
   `).join('');
 }
