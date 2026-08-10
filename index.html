@@ -264,7 +264,7 @@
 
   <div class="gh-bar">
     <div class="gh-status" id="ghStatus"></div>
-    <button onclick="configGitHub()" class="ghost">設定 GitHub Token</button>
+    <button id="ghConfigBtn" onclick="configGitHub()" class="ghost">設定 GitHub Token</button>
   </div>
 
   <div class="layout">
@@ -866,7 +866,14 @@ async function configGitHub(){
 
 function updateGhBar(){
   const cfg = getGHConfig();
-  document.getElementById('ghStatus').textContent = cfg ? `已連接：${cfg.owner}/${cfg.repo}` : '尚未連接 GitHub';
+  const btnEl = document.getElementById('ghConfigBtn');
+  if (cfg && cfg.token) {
+    document.getElementById('ghStatus').textContent = `已連接：${cfg.owner}/${cfg.repo}`;
+    if (btnEl) btnEl.style.display = 'none';
+  } else {
+    document.getElementById('ghStatus').textContent = '尚未連接 GitHub';
+    if (btnEl) btnEl.style.display = 'inline-block';
+  }
 }
 
 async function loadLedger(){
