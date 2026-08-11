@@ -31,7 +31,7 @@
     min-height:100vh;
     padding:32px 20px 80px;
   }
-  .wrap{max-width:850px; margin:0 auto;}
+  .wrap{max-width:1100px; margin:0 auto;}
 
   header.top{
     display:flex; align-items:flex-end; justify-content:space-between;
@@ -144,19 +144,13 @@
     letter-spacing:.1em; margin-bottom:18px; text-transform:uppercase;
   }
 
-  .crit-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;}
+  .crit-toolbar{display:flex; justify-content:flex-end; margin-bottom:10px;}
   .crit-edit-toggle{
     font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:.05em;
     color:var(--ink-light); background:none; border:none; padding:4px 6px;
     text-decoration:underline dotted; cursor:pointer;
   }
   .crit-edit-toggle:hover{background:none; color:var(--brass);}
-  .crit-reset-btn{
-    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--stamp-red);
-    background:none; border:1px solid rgba(166,61,47,0.3); border-radius:2px; padding:4px 10px; cursor:pointer;
-  }
-  .crit-reset-btn:hover{background:rgba(166,61,47,0.1); color:var(--stamp-red);}
-
   .crit-editrow{display:flex; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap;}
   .weight-stepper{display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono', monospace; font-size:14px; color:var(--ink-light);}
   .weight-stepper button{padding:4px 10px; font-size:14px; line-height:1;}
@@ -209,7 +203,7 @@
     background:var(--ink); color:var(--card); border-color:var(--ink);
   }
   .ledger-scroll{
-    max-height:600px;
+    max-height:75vh;
     overflow-y:auto;
     padding-right:8px;
   }
@@ -218,10 +212,41 @@
   .ledger-scroll::-webkit-scrollbar-thumb { background:var(--line); border-radius:3px; }
 
   .ledger-empty{color:var(--ink-faint); font-size:15px; padding:24px 0; text-align:center;}
-  .entry{
-    border-bottom:1px solid var(--line); padding:18px 0; cursor:pointer;
+
+  /* 三欄排版樣式 */
+  .ledger-grid-all {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: start;
   }
-  .entry:last-child{border-bottom:none;}
+  .ledger-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ledger-col-title {
+    font-weight: 700;
+    font-size: 17px;
+    border-bottom: 2px solid var(--line);
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+  .ledger-grid-filtered {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .entry{
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.4);
+    border-radius: 4px;
+    padding: 14px; 
+    cursor: pointer;
+  }
   .entry-top{display:flex; justify-content:space-between; align-items:baseline; gap:12px;}
   .entry-name{font-weight:700; font-size:17px;}
   .entry-verdict{
@@ -249,6 +274,10 @@
     margin-top:32px; font-size:14px; color:var(--ink-faint); line-height:1.8;
     border-top:1px dashed var(--line); padding-top:18px;
   }
+  
+  @media(max-width:800px) {
+    .ledger-grid-all, .ledger-grid-filtered { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -269,10 +298,8 @@
     <button id="navFormBtn" onclick="switchView('form')" class="ghost view-hidden">返回審查</button>
   </div>
 
-  <!-- FORM CARD -->
   <div class="card" id="formCard"></div>
 
-  <!-- LEDGER -->
   <div class="card ledger view-hidden" id="ledgerCard">
     <div class="eyebrow">歷史紀錄</div>
     <h2>裁定存檔</h2>
@@ -289,7 +316,7 @@
 
   <div class="framework-note">
     STEP 1 誠實傾向偵測：若直覺已明確，可直接尊重直覺記錄，不必跑完整審查。<br>
-    STEP 3 第一層：任一條件成立即判處置的充分條件（可隨時編輯或重設條款）。<br>
+    STEP 3 第一層：任一條件成立即判處置的充分條件（可隨時編輯條款）。<br>
     STEP 4 第二層：加權綜合評估 — 各題可自訂方向與權重（1–5 分）。符合計入該方向，不符合計入對向，「不適用」不計分。<br>
     點擊歷史紀錄中的「重新審查」可讓項目重新進入審查流程，獲得新裁定。
   </div>
@@ -490,7 +517,6 @@ function renderStep3(c){
     <h2>是否符合以下任一條件？</h2>
     <p class="help">任一成立即構成充分理由，直接判定處置，無需再看下一層或答完其餘項目。</p>
     <div class="crit-toolbar">
-      <button class="crit-reset-btn" onclick="resetL1Criteria()">重設為預設準則</button>
       <button class="crit-edit-toggle" onclick="toggleEditL1()">${editL1?'完成編輯':'編輯準則'}</button>
     </div>
     <ul class="qlist" id="l1list">
@@ -554,15 +580,6 @@ function addL1(){
   saveCriteria();
   render();
 }
-function resetL1Criteria(){
-  if(confirm("確定要將第一層準則重設為預設項目嗎？")){
-    criteriaL1 = DEFAULT_L1.slice();
-    state.answersL1 = {};
-    saveCriteria();
-    render();
-    syncToGitHubSilently();
-  }
-}
 function afterStep3(){
   if(criteriaL1.some(cr => state.answersL1[cr.id]===true)){
     state.step = 5;
@@ -580,7 +597,6 @@ function renderStep4(c){
     <h2>逐項核對</h2>
     <p class="help">第一層未成立，需綜合評估。每題可設定方向與權重；「符合」計入該方向分數，「不符合」計入對向分數，「不適用」不計分。</p>
     <div class="crit-toolbar">
-      <button class="crit-reset-btn" onclick="resetL2Criteria()">重設為預設準則</button>
       <button class="crit-edit-toggle" onclick="toggleEditL2()">${editL2?'完成編輯':'編輯準則／權重'}</button>
     </div>
     <ul class="qlist" id="l2list">
@@ -693,15 +709,6 @@ function addL2(){
   newL2Weight = 1;
   saveCriteria();
   render();
-}
-function resetL2Criteria(){
-  if(confirm("確定要將第二層準則重設為預設項目嗎？")){
-    criteriaL2 = DEFAULT_L2.slice();
-    state.answersL2 = {};
-    saveCriteria();
-    render();
-    syncToGitHubSilently();
-  }
 }
 
 function computeVerdict(){
@@ -1058,25 +1065,8 @@ function setFilter(filterType, btnEl){
   renderLedger();
 }
 
-function renderLedger(){
-  const el = document.getElementById('ledgerList');
-  document.getElementById('fileNo').textContent = '案卷編號 №' + String(ledger.length).padStart(3,'0');
-
-  if(ledger.length===0){
-    el.innerHTML = '<div class="ledger-empty">尚未有紀錄</div>';
-    return;
-  }
-
-  const filtered = currentFilter === 'all'
-    ? ledger
-    : ledger.filter(e => e.verdictType === currentFilter);
-
-  if(filtered.length===0){
-    el.innerHTML = '<div class="ledger-empty">無此類別的紀錄</div>';
-    return;
-  }
-
-  el.innerHTML = filtered.map(e=>`
+function renderEntryHTML(e) {
+  return `
     <div class="entry" onclick="toggleEntry(this)">
       <div class="entry-top">
         <div class="entry-name">${escapeHtml(e.name)}</div>
@@ -1089,7 +1079,51 @@ function renderLedger(){
         <button class="entry-btn del" onclick="event.stopPropagation(); deleteEntry('${e.id}')">刪除紀錄</button>
       </div>
     </div>
-  `).join('');
+  `;
+}
+
+function renderLedger(){
+  const el = document.getElementById('ledgerList');
+  document.getElementById('fileNo').textContent = '案卷編號 №' + String(ledger.length).padStart(3,'0');
+
+  if(ledger.length===0){
+    el.innerHTML = '<div class="ledger-empty">尚未有紀錄</div>';
+    return;
+  }
+
+  if (currentFilter === 'all') {
+    const keeps = ledger.filter(e => e.verdictType === 'keep');
+    const disposes = ledger.filter(e => e.verdictType === 'dispose');
+    const splits = ledger.filter(e => e.verdictType === 'split');
+
+    el.innerHTML = `
+      <div class="ledger-grid-all">
+        <div class="ledger-col">
+          <div class="ledger-col-title">保留 (${keeps.length})</div>
+          ${keeps.map(e => renderEntryHTML(e)).join('')}
+        </div>
+        <div class="ledger-col">
+          <div class="ledger-col-title">處置 (${disposes.length})</div>
+          ${disposes.map(e => renderEntryHTML(e)).join('')}
+        </div>
+        <div class="ledger-col">
+          <div class="ledger-col-title">拆分 (${splits.length})</div>
+          ${splits.map(e => renderEntryHTML(e)).join('')}
+        </div>
+      </div>
+    `;
+  } else {
+    const filtered = ledger.filter(e => e.verdictType === currentFilter);
+    if(filtered.length===0){
+      el.innerHTML = '<div class="ledger-empty">無此類別的紀錄</div>';
+      return;
+    }
+    el.innerHTML = `
+      <div class="ledger-grid-filtered">
+        ${filtered.map(e => renderEntryHTML(e)).join('')}
+      </div>
+    `;
+  }
 }
 
 function verdictLabel(t){
